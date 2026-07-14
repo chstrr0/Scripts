@@ -1,1 +1,1 @@
-# Heso
+# started learning roblox scripting :)
