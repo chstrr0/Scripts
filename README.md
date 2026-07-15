@@ -1,11 +1,19 @@
-My Luau Vulnerability Learning Journey
+This repository documents my learning journey in Luau security, focusing on client-server trust boundaries and game logic vulnerabilities. Inside are proof-of-concept scripts demonstrating flaws discovered during live analysis.
 
-This folder serves as a personal documentation of my progress learning Luau security. The scripts here are proof-of-concept tools I built after analyzing different Roblox games for logic flaws.
+⚠️ Disclaimer: Created strictly for educational and security research purposes.
 
-Through active testing, these are the first major Luau vulnerabilities I've learned to spot and write scripts for:
+🛠️ Tools Used
+Analysis: Dex Explorer (DataModel inspection) & Remote Spies (rspy/sspy for network sniffing)
 
-Missing Checkpoint Validation: Bypassing sequential game loops by script-teleporting to the final pad.
+Execution: Runtime executors to test server-side validation
 
-Unsecure RemoteEvents: Exploiting open client-to-server endpoints to programmatically spam and duplicate items.
+🔍 Vulnerability Index
+1. Level & Requirement Bypass
+The Flaw: The server trusts the client's position or map access rules. Players can bypass level gates, teleport directly to the final map, and loop the sequence for infinite wins.
 
-Hunting for these specific Luau vulnerabilities is now the first thing I do when testing a game. I am still learning, sharpening my skills, and documenting my findings here as I work to become a better security researcher.
+Fix: The server must independently verify a player's actual level and prerequisites before awarding wins or updating their location.
+
+2. Item Duplication (Unsecured RemoteEvents)
+The Flaw: Server-side listeners blindly process network requests (like item spawning or asset updates) without verifying if the player actually owns the item.
+
+Fix: Never trust client network arguments. Enforce strict server-side inventory verification and rate limits on all events.
